@@ -1,0 +1,117 @@
+<section *ngFor='let ts of clinicdatalist'>
+    <div>
+        <div class="card">
+            <div class="card-body ">
+                <div class="d-md-flex">
+                    <div>
+                        <h4 class="card-title">Clinic approval form</h4>
+                        <h5 class="card-subtitle text-muted">Organization details</h5>
+                    </div>
+                </div>
+                <div class="row justify-content-center px-4">
+                    <div class="container center-container">
+                        <div class="item">
+                            <label>
+                                <input id="check" type="checkbox" value="test1" name="test" />
+                                <span class="checkbox"></span>
+                            </label>
+                            <h4 class="card-title">Image</h4>
+                        </div>
+                        <br>
+                        <div class="item">
+                            <label>
+                                <input id="check" type="checkbox" value="test2" name="test" />
+                                <span class="checkbox"></span>
+                            </label>
+                            <h4 class="card-title">Email</h4>
+                            <h5 class="card-subtitle text-muted mt-1">{{ts.email}}</h5>
+                        </div>
+                        <br>
+                        <div class="item">
+                            <label>
+                                <input id="check" type="checkbox" value="test3" name="test" />
+                                <span class="checkbox"></span>
+                            </label>
+                            <h4 class="card-title">Address</h4>
+                            <h5 class="card-subtitle text-muted mt-1">{{ts.address}}</h5>
+                            <h5 class="card-subtitle text-muted mt-1">{{ts.city}}</h5>
+                            <h5 class="card-subtitle text-muted mt-1">{{ts.state}}</h5>
+                        </div>
+                        <br>
+                        <div class="item">
+                            <label>
+                                <input id="check" type="checkbox" value="test3" name="test" />
+                                <span class="checkbox"></span>
+                            </label>
+                            <h4 class="card-title">Phone number</h4>
+                            <h5 class="card-subtitle text-muted mt-1">{{ts.phonenumber}}</h5>
+                        </div>
+                        <br>
+                        <div class="item">
+                            <label>
+                                <input id="check" type="checkbox" value="test3" name="test" />
+                                <span class="checkbox"></span>
+                            </label>
+                            <h4 class="card-title">Bank account number</h4>
+                            <h5 class="card-subtitle text-muted mt-1">{{ts.banknumber}}</h5>
+                        </div>
+                        <br>
+                        <div class="item">
+                            <label>
+                                <input id="check" type="checkbox" value="test3" name="test" />
+                                <span class="checkbox"></span>
+                            </label>
+                            <h4 class="card-title">IFSC number</h4>
+                            <h5 class="card-subtitle text-muted mt-1">{{ts.ifsc}}</h5>
+                        </div>
+                        <br>
+                        <div class="item">
+                            <label>
+                                <input id="check" type="checkbox" value="test3" name="test" />
+                                <span class="checkbox"></span>
+                            </label>
+                            <h4 class="card-title">Bank branch</h4>
+                            <h5 class="card-subtitle text-muted mt-1">{{ts.bankbranch}}</h5>
+                        </div>
+                        <br>
+                        <div class="item">
+                            <label>
+                                <input id="check" type="checkbox" value="test3" name="test" />
+                                <span class="checkbox"></span>
+                            </label>
+                            <h4 class="card-title">GST number</h4>
+                            <h5 class="card-subtitle text-muted mt-1">{{ts.gst}}</h5>
+                        </div>
+                    </div>
+                </div>
+
+
+                <br>
+                <div class="d-flex justify-content-end gap-2 p-4">
+                    <button class="right-button" [routerLink]="['/userapproval/pendingusers']">Approved</button>
+                    <button data-bs-toggle="modal" data-bs-target="#modalid">Rejected</button>
+                </div>
+            </div>
+            <div class="modal fade" id="modalid">
+                <div class="modal-dialog modal-dialog-center">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Reason for rejection</h5>
+                            <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form>
+                            <div class="modal-body">
+                                <input type="text-box" placeholder="Description" />
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" data-bs-dismiss="modal"
+                                    [routerLink]="['/userapproval/pendingusers']">OK</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
