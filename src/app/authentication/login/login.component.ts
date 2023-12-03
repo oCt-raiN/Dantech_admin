@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router , ActivatedRoute} from '@angular/router';
+import { first } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-login',
@@ -7,6 +11,35 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
+  form: FormGroup;
+  loading = false;
+  submitted = false;
+  result:any
+
+  constructor(private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router, 
+    private authservice:AuthService,) {} 
+
+  ngOnInit() {
+
+    this.form = this.formBuilder.group({
+      email: ['',[Validators.required,Validators.email]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/
+          ),
+          Validators.minLength(8),
+        ],
+      ]
+    });
+
+  }
+
+  
   togglePanel(isSignUp: boolean): void {
     const container = document.getElementById('container');
 
@@ -21,12 +54,29 @@ export class LoginComponent {
       console.error('Element with ID "container" not found.');
     }
   }
-  constructor(private router: Router) {}
+
+  
+  get f() { return this.form.controls; }
 
   onSubmit() {
     // Your form submission logic here
-
-    // After successful form submission, navigate to the desired route
+    this.submitted = true;
+    // reset alerts on submit
+    // this.alertService.clear();
+     // stop here if form is invalid
+     if (this.form.invalid) {
+      return;
+  }
+  this.loading = true;
+  this.authservice.adminlogin(this.f['email'].value, this.f['password'].value)
+  .pipe(first())
+  .subscribe({
+      next: () => {
+          // get return url from query parameters or default to home page
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+          this.router.navigateByUrl(returnUrl);
+      },
+    });
     this.router.navigate(['/dashboard']);
   }
 }
