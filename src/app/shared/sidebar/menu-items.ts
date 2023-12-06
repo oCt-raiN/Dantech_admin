@@ -2,7 +2,7 @@ import { RouteInfo } from './sidebar.metadata';
 
 export const ROUTES: RouteInfo[] = [
   {
-    path: '/dashboard',
+    path: '/det/dashboard',
     title: 'Dashboard',
     icon: 'bi bi-speedometer2',
     class: '',
@@ -11,15 +11,15 @@ export const ROUTES: RouteInfo[] = [
   },
 
   {
-    path: 'blank/auth/login',
+    path: '/auth/login',
     title: 'Login',
     icon: 'bi bi-box-arrow-in-right',
-    class: '',
+    class: 'disabled',
     extralink: false,
     submenu: [],
   },
   {
-    path: 'userapproval/approvedusers',
+    path: '/det/userapproval/approvedusers',
     title: 'Approved users',
     icon: 'bi bi-person-fill-check',
     class: '',
@@ -27,7 +27,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [],
   },
   {
-    path: 'userapproval/pendingusers',
+    path: '/det/userapproval/pendingusers',
     title: 'Pending approvals',
     icon: 'bi bi-person-fill-exclamation',
     class: '',
@@ -35,7 +35,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [],
   },
   {
-    path: 'userapproval/rejectedusers',
+    path: '/det/userapproval/rejectedusers',
     title: 'Rejected approvals',
     icon: 'bi bi-person-fill-x',
     class: '',
@@ -43,7 +43,15 @@ export const ROUTES: RouteInfo[] = [
     submenu: [],
   },
   {
-    path: '/pages/addclient',
+    path: '/det/pages/addclient',
+    title: 'Add client',
+    icon: 'bi bi-person-add',
+    class: 'disabled',
+    extralink: false,
+    submenu: [],
+  },
+  {
+    path: '/auth/user/register',
     title: 'Add users',
     icon: 'bi bi-person-add',
     class: '',

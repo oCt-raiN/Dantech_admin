@@ -15,7 +15,7 @@ export class LoginComponent {
   loading = false;
   submitted = false;
   result:any
-
+  loginError: boolean = false;
   constructor(private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router, 
@@ -59,7 +59,7 @@ export class LoginComponent {
   get f() { return this.form.controls; }
 
   onSubmit() {
-    // Your form submission logic here
+   
     this.submitted = true;
     // reset alerts on submit
     // this.alertService.clear();
@@ -71,12 +71,26 @@ export class LoginComponent {
   this.authservice.adminlogin(this.f['email'].value, this.f['password'].value)
   .pipe(first())
   .subscribe({
-      next: () => {
-          // get return url from query parameters or default to home page
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-          this.router.navigateByUrl(returnUrl);
-      },
+    next: (res) => {
+      this.result = res;
+      // window.confirm(this.result.message);
+      // get return url from query parameters or default to home page
+      // const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+      // this.router.navigateByUrl(returnUrl);
+      this.router.navigate(['/det/dashboard']);
+    },
+    error: (error) => {
+      this.loading = false;
+      this.loginError =true;
+
+    }
+    
+    // {
+    //   // this.alertService.error(error);
+    //   // this.loading = false;
+    // }
     });
     this.router.navigate(['/dashboard']);
   }
+  
 }

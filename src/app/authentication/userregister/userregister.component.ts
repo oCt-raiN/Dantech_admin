@@ -5,11 +5,14 @@ import { Router , ActivatedRoute} from '@angular/router';
 import { first } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  selector: 'app-userregister',
+  templateUrl: './userregister.component.html',
+  styleUrls: ['./userregister.component.scss']
 })
-export class RegisterComponent { form: FormGroup;
+export class UserregisterComponent {
+  
+  
+  form: FormGroup;
   loading = false;
   submitted = false;
   result:any
@@ -19,18 +22,16 @@ export class RegisterComponent { form: FormGroup;
   reg_loading = false;
   reg_result:any
   passwordsMatching = false;
-  loginError: boolean = false;
-  RegisterError: boolean =false;
 
   constructor(private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router, 
     private authservice:AuthService,) {}
 
-    
+
     
   ngOnInit() {
-    
+
     this.form = this.formBuilder.group({
       email: ['',[Validators.required,Validators.email]],
       password: [
@@ -48,8 +49,8 @@ export class RegisterComponent { form: FormGroup;
     this.register = this.formBuilder.group({
       email: ['',[Validators.required,Validators.email]],
       name: ['',[Validators.required,Validators.pattern(/^[A-z]*$/),Validators.min(3)]],
-      // address: ['',[Validators.required,Validators.maxLength(50)]],
-      // phonenumber: ['',[Validators.required,Validators.pattern("[0-9]{10}")]],
+      address: ['',[Validators.required,Validators.maxLength(50)]],
+      phonenumber: ['',[Validators.required,Validators.pattern("[0-9]{10}")]],
       password: ['',[Validators.required,Validators.pattern(
         /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/
       ),Validators.minLength(8)]],
@@ -76,39 +77,23 @@ export class RegisterComponent { form: FormGroup;
   this.authservice.login(this.f['email'].value, this.f['password'].value)
   .pipe(first())
   .subscribe({
-    next: (res) => {
-      this.result = res;
-      // window.confirm(this.result.message);
-      // get return url from query parameters or default to home page
-      // const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-      // this.router.navigateByUrl(returnUrl);
-      this.router.navigate(['/det/profile/view']);
-    },
-    error: (error) => {
-      this.loading = false;
-      this.loginError =true;
-
-    }
-    // {
-    //   // this.alertService.error(error);
-    //   // this.loading = false;
-    // }
+      next: () => {
+          // get return url from query parameters or default to home page
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+          this.router.navigateByUrl(returnUrl);
+      },
     });
-
+    this.router.navigate(['/det/profile/view']);
   }
 
-  
-
-  
   Register(){
-
     this.reg_submitted = true;
 
     if (this.register.invalid){
       return;
     }
     this.reg_loading = true;
-    this.authservice.adminregister(this.register.value)
+    this.authservice.register(this.register.value)
       .pipe(first())
       .subscribe({
           next: () => {
@@ -117,10 +102,12 @@ export class RegisterComponent { form: FormGroup;
               window.location.reload();
           },
           error: error => {
-            this.RegisterError = true;
+              // this.alertService.error(error);
+              this.loading = false;
           }
       });
-    
+
+    // window.location.reload();
   }
 
 
@@ -138,4 +125,6 @@ export class RegisterComponent { form: FormGroup;
       console.error('Element with ID "container" not found.');
     }
   }
+
+
 }

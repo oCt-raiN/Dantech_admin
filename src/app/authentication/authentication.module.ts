@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthenticationRoutes } from './authentication.routing';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { UserregisterComponent } from './userregister/userregister.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { RegisterComponent } from './register/register.component';
 
   
     LoginComponent,
-        RegisterComponent
+        RegisterComponent,
+        UserregisterComponent
   ],
 })
 export class AuthenticationModule {}

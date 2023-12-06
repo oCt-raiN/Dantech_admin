@@ -6,12 +6,10 @@ import { BlankComponent } from './layouts/blank/blank.component';
 
 export const Approutes: Routes = [
   {
-    path: '',
+    path: 'det',
     component: FullComponent,
     children: [
-      { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-
-      {
+          {
         path: 'dashboard',
         loadChildren: () =>
           import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
@@ -21,13 +19,7 @@ export const Approutes: Routes = [
         loadChildren: () =>
           import('./about/about.module').then((m) => m.AboutModule),
       },
-      {
-        path: 'auth',
-        loadChildren: () =>
-          import('./authentication/authentication.module').then(
-            (m) => m.AuthenticationModule
-          ),
-      },
+
       {
         path: 'component',
         loadChildren: () =>
@@ -52,12 +44,18 @@ export const Approutes: Routes = [
             (m) => m.UserapprovalRoutingModule
           ),
       },
+      // {
+      //   path: 'createuser',
+      //   loadChildren: () =>
+      //   import('./userregister/')
+      // }
     ],
   },
   {
-    path: 'blank',
+    path: '',
     component: BlankComponent,
     children: [
+      { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
       {
         path: 'auth',
         loadChildren: () =>

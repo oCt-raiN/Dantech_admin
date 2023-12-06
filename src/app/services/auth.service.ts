@@ -49,21 +49,26 @@ export class AuthService {
         }));
 }
 
+
 adminlogin(email: string, password: string) {
-  return this.http.post<Admin>(`${environment.apiUrl}/api/admin/login`, { email, password })
-      .pipe(map(admin => {
+  return this.http.post<User>(`${environment.apiUrl}/api/admin/login`, { email, password })
+      .pipe(map(user => {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('user', JSON.stringify(admin));
-          this.adminSubject.next(admin);
+          localStorage.setItem('user', JSON.stringify(user));
+          this.userSubject.next(user);
           // location.reload();
-          return admin;
+          return user;
       }));
 }
 
 
   register(user: User) {
-  return this.http.post(`${environment.apiUrl}/api/user/register`, user);
-}
+  return this.http.post(`${environment.apiUrl}/api/admin/userregister`, user);
+  }
+
+  adminregister(user: User) {
+    return this.http.post(`${environment.apiUrl}/api/admin/register`, user);
+  }
 
   profilereg(profile: Profileinformation){
     return this.http.post(`${environment.apiUrl}/api/profile/save`,profile)
