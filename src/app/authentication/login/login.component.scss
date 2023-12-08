@@ -75,7 +75,8 @@ form {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 0 50px;
+  padding: 0;
+  margin: 0 45px;
   height: 100%;
   text-align: center;
 }
@@ -164,8 +165,8 @@ input {
 
 .overlay {
   background: #19d4ca;
-  background: -webkit-linear-gradient(to right, #ffffff, #00ffff);
-  background: linear-gradient(to right, #ffffff 45%, #00ffff);
+  background: -webkit-linear-gradient(to right, #19d4ca, rgba(65, 84, 255, 0.906));
+  background: linear-gradient(to bottom right, #19d4ca 45%, rgba(65, 84, 255, 0.906));
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
