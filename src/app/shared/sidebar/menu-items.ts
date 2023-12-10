@@ -30,7 +30,7 @@ export const ROUTES: RouteInfo[] = [
     path: '',
     title: 'Users',
     icon: 'bi bi-person-lines-fill',
-    class: '',
+    class: 'd-none',
     extralink: false,
     submenu: [
       {

@@ -13,6 +13,8 @@ export class PendingusersComponent {
   filteredData: any[] = [];
   sortcolumn: string = '';
   sortDirection: string = 'asc';
+  // user details
+  
 
   constructor(public router: Router, private activatedRoute: ActivatedRoute) {
     this.userapprovaldetails = approvallist;

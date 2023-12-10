@@ -82,5 +82,8 @@ adminlogin(email: string, password: string) {
     return this.http.post(`${environment.apiUrl}/api/doctor/save`,doc)
   }
 
+  getallusers(admin: Admin){
+    return this.http.post(`${environment.apiUrl}/api/doctor/save`,admin)
+  }
 
 }
