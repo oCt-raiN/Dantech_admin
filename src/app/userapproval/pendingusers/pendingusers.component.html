@@ -17,15 +17,15 @@
             <table class="table align-middle">
                 <thead>
                     <tr>
-                        <th (click)="sortColumn('organizationid')" class="text-dark font-medium fs-4">Organization ID
+                        <th (click)="sortColumn('clinicid')" class="text-dark font-medium fs-4">Organization ID
                             &nbsp; <i class="bi bi-arrow-down-up"></i></th>
-                        <th (click)="sortColumn('organizationname')" class="text-dark font-medium fs-4">Organization
+                        <th (click)="sortColumn('clinicName')" class="text-dark font-medium fs-4">Organization
                             Name
                             &nbsp; <i class="bi bi-arrow-down-up"></i></th>
-                        <th (click)="sortColumn('organizationemail')" class="text-dark font-medium fs-4">Organization
+                        <th (click)="sortColumn('email')" class="text-dark font-medium fs-4">Organization
                             Email
                             &nbsp; <i class="bi bi-arrow-down-up"></i></th>
-                        <th (click)="sortColumn('organizationaddress')" class="text-dark font-medium fs-4">Organization
+                        <th (click)="sortColumn('address')" class="text-dark font-medium fs-4">Organization
                             address
                             &nbsp; <i class="bi bi-arrow-down-up"></i></th>
                         <th (click)="sortColumn('phonenumber')" class="text-dark font-medium fs-4">Phonenumber
@@ -35,18 +35,18 @@
                 </thead>
                 <tbody>
                     <tr *ngFor='let ts of filteredData'>
-                        <ng-container *ngIf="ts.orgapproval == 'Waiting'">
+                        <ng-container *ngIf="ts.statuscode == 'WA4000'">
                             <td class="fs-4">
-                                {{ts.organizationid}}
+                                {{ts.clinicid}}
                             </td>
                             <td>
-                                {{ts.organizationname}}
+                                {{ts.clinicName}}
                             </td>
                             <td>
-                                {{ts.organizationemail}}
+                                {{ts.email}}
                             </td>
                             <td>
-                                {{ts.organizationaddress}}
+                                {{ts.address}}
                             </td>
                             <td>
                                 {{ts.phonenumber}}

@@ -82,8 +82,15 @@ adminlogin(email: string, password: string) {
     return this.http.post(`${environment.apiUrl}/api/doctor/save`,doc)
   }
 
-  getallusers(admin: Admin){
-    return this.http.post(`${environment.apiUrl}/api/doctor/save`,admin)
+  getallusers(userToken: any) {
+    const body = {
+      userToken: userToken,
+    };
+    var URL = `${environment.apiUrl}/api/admin/getallusers`;
+    return this.http.post<any>(URL, body).pipe(
+      map((res: any) => {
+        return res;
+      })
+    );
   }
-
 }

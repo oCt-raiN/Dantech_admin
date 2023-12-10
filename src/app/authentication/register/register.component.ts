@@ -82,7 +82,9 @@ export class RegisterComponent { form: FormGroup;
       // get return url from query parameters or default to home page
       // const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
       // this.router.navigateByUrl(returnUrl);
-      this.router.navigate(['/det/profile/view']);
+      // this.router.navigate(['/det/profile/view']);
+      
+      
     },
     error: (error) => {
       this.loading = false;
@@ -113,8 +115,8 @@ export class RegisterComponent { form: FormGroup;
       .subscribe({
           next: () => {
               // this.alertService.success('Registration successful', { keepAfterRouteChange: true });
-              this.router.navigate(['../pages-login'], { relativeTo: this.route });
-              // window.location.reload();
+              // this.router.navigate(['../pages-login'], { relativeTo: this.route });
+              window.location.reload();
           },
           error: error => {
             this.RegisterError = true;
