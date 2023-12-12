@@ -4,26 +4,24 @@ import { userapprovaldata, approvallist } from '../userapproval-data';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
-
-function mergeDictionaries(dict1 :any, dict2:any) {
+function mergeDictionaries(dict1: any, dict2: any) {
   const mergedList = [];
 
   for (const key in dict1) {
-      if (dict1.hasOwnProperty(key)) {
-          const mergedDict = { ...dict1[key] };
+    if (dict1.hasOwnProperty(key)) {
+      const mergedDict = { ...dict1[key] };
 
-          if (dict2.hasOwnProperty(key)) {
-              // Merge properties from dict2 when the key exists in both dictionaries
-              Object.assign(mergedDict, dict2[key]);
-          }
-
-          mergedList.push(mergedDict);
+      if (dict2.hasOwnProperty(key)) {
+        // Merge properties from dict2 when the key exists in both dictionaries
+        Object.assign(mergedDict, dict2[key]);
       }
+
+      mergedList.push(mergedDict);
+    }
   }
 
   return mergedList;
 }
-
 
 @Component({
   selector: 'app-pendingusers',
@@ -38,21 +36,17 @@ export class PendingusersComponent {
   sortDirection: string = 'asc';
   // user details
   user_data: any;
-  user_datas:any;
+  user_datas: any;
   user_details: any;
-  user_status : any;
+  user_status: any;
   userdatasubscribtion: Subscription;
 
-
-
-  
-
-  constructor(    public router: Router,
+  constructor(
+    public router: Router,
     private activatedRoute: ActivatedRoute,
     private route: ActivatedRoute,
-    private authservice: AuthService) {
-    
-  }
+    private authservice: AuthService
+  ) {}
 
   //sortcolumn
   sortColumn(column: string) {
@@ -87,9 +81,7 @@ export class PendingusersComponent {
         console.log('My data', this.filteredData);
         // Customize the filtering logic as needed
         return (
-          item.address
-            .toLowerCase()
-            .includes(this.searchText.toLowerCase()) ||
+          item.address.toLowerCase().includes(this.searchText.toLowerCase()) ||
           item.email.includes(this.searchText) ||
           item.clinicid.includes(this.searchText) ||
           item.clinicName
@@ -113,23 +105,24 @@ export class PendingusersComponent {
 
   //init
   ngOnInit(): void {
-    const { adminToken }= JSON.parse(localStorage.getItem('user') ?? '{}');
+    const { adminToken } = JSON.parse(localStorage.getItem('user') ?? '{}');
     // console.log(adminToken)
 
-    this.userdatasubscribtion =this.authservice.getallusers(adminToken).subscribe(
-      (res:any)=>{
-        this.user_details = res;
-        this.user_datas = this.user_details["user"];
-        this.user_status = this.user_details["state"]
-        this.user_data = mergeDictionaries(this.user_datas,this.user_status);
-        this.filteredData =this.user_data;
-        // console.log(this.filteredData)
-        
-      },
-      (error: any)=>{
-        console.log(error)
-      }
-    );
-
+    this.userdatasubscribtion = this.authservice
+      .getallusers(adminToken)
+      .subscribe(
+        (res: any) => {
+          this.user_details = res;
+          this.user_datas = this.user_details['user'];
+          this.user_status = this.user_details['state'];
+          this.user_data = mergeDictionaries(this.user_datas, this.user_status);
+          this.filteredData = this.user_data;
+          console.log(this.user_data);
+          // console.log(this.filteredData)
+        },
+        (error: any) => {
+          console.log(error);
+        }
+      );
   }
 }

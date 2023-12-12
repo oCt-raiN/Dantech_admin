@@ -25,7 +25,7 @@ const routes: Routes = [
         component: RejectedusersComponent,
       },
       {
-        path: 'checklist',
+        path: 'checklist/:id',
         component: ChecklistComponent,
       },
     ],
@@ -33,7 +33,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule, RouterModule.forChild(routes)],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
+  ],
   declarations: [
     ApprovedusersComponent,
     PendingusersComponent,

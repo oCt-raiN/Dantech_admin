@@ -3,15 +3,77 @@ import { clinicdat, clinicdata } from './checklist-data';
 import { Router, ActivatedRoute } from '@angular/router';
 import { userapprovaldata, approvallist } from '../userapproval-data';
 import { Subscription } from 'rxjs';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import * as $ from 'jquery';
+import { OnInit } from '@angular/core';
+import { first } from 'rxjs/operators';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+
+function calculatePercentageCompletion(obj: any, doc: any): string {
+  let totalFields = 0;
+  let filledFields = 0;
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      totalFields++;
+
+      // Check if the key is "image" and the value is "assests/images/users/user.svg"
+      if (key === 'image' && obj[key] === 'assets/images/users/user.svg') {
+        // Reduce the filledFields count by 1
+        filledFields--;
+      } else if (obj[key] !== null) {
+        filledFields++;
+      }
+    }
+  }
+
+  if (doc) {
+    filledFields++;
+  }
+
+  filledFields--;
+
+  return String(
+    totalFields === 0
+      ? 0
+      : Number(((filledFields / totalFields) * 100).toFixed(0))
+  );
+}
+
+function convertNullValues(data: any) {
+  const convertedData = {};
+
+  for (const key in data) {
+    if (data[key] === null) {
+      // Check the type of the original value and assign the appropriate replacement
+      convertedData[key] = typeof data[key] === 'number' ? 0 : 'None';
+    } else {
+      convertedData[key] = data[key];
+    }
+  }
+
+  return convertedData;
+}
 
 @Component({
   selector: 'app-checklist',
   templateUrl: './checklist.component.html',
   styleUrls: ['./checklist.component.scss'],
 })
-export class ChecklistComponent {
+export class ChecklistComponent implements OnInit {
+  form: FormGroup;
+  reject_form: FormGroup;
+  loading = false;
+  submitted = false;
+  result: any;
+
   clinicdetails: clinicdata[];
   clinicdatalist: any[] = [];
   searchText: string = '';
@@ -25,59 +87,73 @@ export class ChecklistComponent {
   user_details: any;
   user_status: any;
   userdatasubscribtion: Subscription;
+  // authenticate user
+  stat_user: string;
+  userId: string;
+  userType: string;
+  accessToken: string;
+  userToken: any;
+  userdata: any;
+  UserDetails: any;
+  userDetailsSubscription: Subscription;
+  userObject: void;
+  doc_count: any;
+  // check prescence
+  gst_no = false;
+  img_uploaded = false;
 
-  constructor(public router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(
+    public router: Router,
+    private activatedRoute: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private authservice: AuthService
+  ) {
     this.clinicdetails = clinicdat;
   }
 
-  //sortcolumn
-  sortColumn(column: string) {
-    // Check if the column is already sorted
-    if (this.sortcolumn === column) {
-      // If the same column is clicked again, toggle the sorting order
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      // If a different column is clicked, set the sorting column and direction
-      this.sortcolumn = column;
-      this.sortDirection = 'asc'; // Default to ascending order
-    }
-
-    // Sort the filtered data based on the chosen column and direction
-    this.filteredData.sort((a, b) => {
-      const valueA = a[column];
-      const valueB = b[column];
-
-      if (this.sortDirection === 'asc') {
-        return valueA.localeCompare(valueB);
-      } else {
-        return valueB.localeCompare(valueA);
-      }
-    });
+  get f() {
+    return this.form.controls;
   }
-
-  //filterdata
-  filterData() {
-    if (this.searchText) {
-      console.log('Hi');
-      this.filteredData = this.user_data.filter((item: any) => {
-        console.log('My data', this.filteredData);
-        // Customize the filtering logic as needed
-        return (
-          item.address.toLowerCase().includes(this.searchText.toLowerCase()) ||
-          item.email.includes(this.searchText) ||
-          item.clinicid.includes(this.searchText) ||
-          item.clinicName
-            .toLowerCase()
-            .includes(this.searchText.toLowerCase()) ||
-          item.phonenumber.toLowerCase().includes(this.searchText.toLowerCase())
-        );
-      });
-    } else {
-      this.filteredData = this.user_data; // If searchText is empty, show all data
-    }
+  get r() {
+    return this.reject_form.controls;
   }
 
   ngOnInit(): void {
+    this.activatedRoute.params.subscribe((paramsId) => {
+      this.userToken = paramsId['id'];
+      this.userId = this.userToken;
+
+      //user details
+      this.userDetailsSubscription = this.authservice
+        .getUserDetails(this.userId)
+        .subscribe(
+          (res: any) => {
+            this.UserDetails = res;
+            // console.log('My details', this.UserDetails['profile']);
+            const userObject = this.UserDetails['profile'];
+            const percentageCompletion: string = calculatePercentageCompletion(
+              userObject,
+              this.doc_count
+            );
+            userObject.profilecompletionpercentage = percentageCompletion;
+            this.userdata = convertNullValues(userObject);
+            if (this.userdata['image'] != 'assets/images/users/user.svg') {
+              this.img_uploaded = true;
+            }
+            if (this.userdata['gst'] != 'None') {
+              this.gst_no = true;
+            }
+
+            this.user_data = [this.userdata];
+            console.log(this.user_data);
+          },
+          (error: any) => {
+            console.log('Error fetching user details:', error);
+          }
+        );
+    });
+
     $(document).ready(function () {
       $('.check-btn').on('click', function () {
         // Disable the check button
@@ -93,6 +169,44 @@ export class ChecklistComponent {
         $('.check-btn').prop('disabled', false);
       });
     });
-    this.clinicdatalist = this.clinicdetails;
+
+    this.form = this.formBuilder.group({
+      name: ['', [Validators.required]],
+    });
+
+    this.reject_form = this.formBuilder.group({
+      description: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(80),
+          Validators.minLength(10),
+        ],
+      ],
+    });
+  }
+
+  onSubmit() {
+    this.submitted = true;
+  }
+
+  Reject() {
+    this.submitted = true;
+
+    if (this.reject_form.invalid) {
+      return;
+    }
+    this.authservice
+      .rejectuser(this.reject_form.value, this.userId)
+      .pipe(first())
+      .subscribe({
+        next: () => {},
+        error: (error) => {
+          // this.alertService.error(error);
+          this.loading = false;
+        },
+      });
+
+    // this.router.navigate(['/det/userapproval/pendingusers']);
   }
 }
