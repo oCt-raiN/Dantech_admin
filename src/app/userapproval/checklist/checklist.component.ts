@@ -72,6 +72,7 @@ export class ChecklistComponent implements OnInit {
   reject_form: FormGroup;
   loading = false;
   submitted = false;
+  submiiterdform: any;
   result: any;
 
   clinicdetails: clinicdata[];
@@ -112,13 +113,6 @@ export class ChecklistComponent implements OnInit {
     this.clinicdetails = clinicdat;
   }
 
-  get f() {
-    return this.form.controls;
-  }
-  get r() {
-    return this.reject_form.controls;
-  }
-
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((paramsId) => {
       this.userToken = paramsId['id'];
@@ -138,13 +132,6 @@ export class ChecklistComponent implements OnInit {
             );
             userObject.profilecompletionpercentage = percentageCompletion;
             this.userdata = convertNullValues(userObject);
-            if (this.userdata['image'] != 'assets/images/users/user.svg') {
-              this.img_uploaded = true;
-            }
-            if (this.userdata['gst'] != 'None') {
-              this.gst_no = true;
-            }
-
             this.user_data = [this.userdata];
             console.log(this.user_data);
           },
@@ -171,7 +158,14 @@ export class ChecklistComponent implements OnInit {
     });
 
     this.form = this.formBuilder.group({
-      name: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.max(1)]],
+      image: ['', [Validators.required, Validators.max(1)]],
+      address: ['', [Validators.required, Validators.max(1)]],
+      phonenumber: ['', [Validators.required, Validators.max(1)]],
+      bankacnumber: ['', [Validators.required, Validators.max(1)]],
+      ifsc: ['', [Validators.required, Validators.max(1)]],
+      gst: ['', [Validators.required, Validators.max(1)]],
+      bankbranch: ['', [Validators.required, Validators.max(1)]],
     });
 
     this.reject_form = this.formBuilder.group({
@@ -186,18 +180,21 @@ export class ChecklistComponent implements OnInit {
     });
   }
 
-  onSubmit() {
-    this.submitted = true;
+  get f() {
+    return this.form.controls;
+  }
+  get r() {
+    return this.reject_form.controls;
   }
 
-  Reject() {
-    this.submitted = true;
-
-    if (this.reject_form.invalid) {
+  onSubmit() {
+    this.submiiterdform = true;
+    if (this.form.invalid) {
       return;
     }
+
     this.authservice
-      .rejectuser(this.reject_form.value, this.userId)
+      .approveuser(this.userId)
       .pipe(first())
       .subscribe({
         next: () => {},
@@ -207,6 +204,26 @@ export class ChecklistComponent implements OnInit {
         },
       });
 
-    // this.router.navigate(['/det/userapproval/pendingusers']);
+    this.router.navigate(['/det/userapproval/approvedusers']);
+  }
+
+  Reject() {
+    this.submitted = true;
+
+    if (this.reject_form.invalid) {
+      return;
+    }
+    this.authservice
+      .rejectuser(this.userId, this.reject_form.value)
+      .pipe(first())
+      .subscribe({
+        next: () => {},
+        error: (error) => {
+          // this.alertService.error(error);
+          this.loading = false;
+        },
+      });
+
+    this.router.navigate(['/det/userapproval/rejectedusers']);
   }
 }

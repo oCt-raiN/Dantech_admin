@@ -109,9 +109,9 @@ export class AuthService {
     return this.http.put(`${environment.apiUrl}/api/admin/approveuser`, body);
   }
 
-  rejectuser(userToken: any, description: any) {
+  rejectuser(userId: any, description: any) {
     const body = {
-      userToken: userToken,
+      userToken: userId,
       description: description,
     };
     console.log(body);

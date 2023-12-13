@@ -4,23 +4,17 @@ import { userapprovaldata, approvallist } from '../userapproval-data';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
-function mergeDictionaries(dict1: any, dict2: any) {
-  const mergedList = [];
+function joinDictionaries(clinics, statuses) {
+  // Create a map to store clinics based on clinic ID
+  const clinicMap = new Map(clinics.map((clinic) => [clinic.clinicid, clinic]));
 
-  for (const key in dict1) {
-    if (dict1.hasOwnProperty(key)) {
-      const mergedDict = { ...dict1[key] };
+  // Iterate through statuses and add clinic details where clinic IDs match
+  const joinedData = statuses.map((status) => {
+    const clinicDetails = clinicMap.get(status.clinicid);
+    return { ...status, clinicDetails };
+  });
 
-      if (dict2.hasOwnProperty(key)) {
-        // Merge properties from dict2 when the key exists in both dictionaries
-        Object.assign(mergedDict, dict2[key]);
-      }
-
-      mergedList.push(mergedDict);
-    }
-  }
-
-  return mergedList;
+  return joinedData;
 }
 
 @Component({
@@ -113,10 +107,12 @@ export class PendingusersComponent {
       .subscribe(
         (res: any) => {
           this.user_details = res;
+          console.log(this.user_details);
           this.user_datas = this.user_details['user'];
           this.user_status = this.user_details['state'];
-          this.user_data = mergeDictionaries(this.user_datas, this.user_status);
+          this.user_data = joinDictionaries(this.user_datas, this.user_status);
           this.filteredData = this.user_data;
+          // console.log(this.user_datas, this.user_status);
           console.log(this.user_data);
           // console.log(this.filteredData)
         },

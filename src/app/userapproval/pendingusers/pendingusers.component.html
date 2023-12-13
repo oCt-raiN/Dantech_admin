@@ -40,20 +40,20 @@
                                 {{ts.clinicid}}
                             </td>
                             <td>
-                                {{ts.clinicName}}
+                                {{ts.clinicDetails.clinicName}}
                             </td>
                             <td>
-                                {{ts.email}}
+                                {{ts.clinicDetails.email}}
                             </td>
                             <td>
-                                {{ts.address}}
+                                {{ts.clinicDetails.address}}
                             </td>
                             <td>
-                                {{ts.phonenumber}}
+                                {{ts.clinicDetails.phonenumber}}
                             </td>
                             <td>
                                 <button class="btn btn-light-primary btn-sm"
-                                    [routerLink]="['/det/userapproval/checklist/',ts.userToken]"><i
+                                    [routerLink]="['/det/userapproval/checklist/',ts.clinicDetails.userToken]"><i
                                         class="bi bi-info"></i></button>
                             </td>
                         </ng-container>
