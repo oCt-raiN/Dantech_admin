@@ -26,15 +26,15 @@
             <table class="table align-middle">
                 <thead>
                     <tr>
-                        <th (click)="sortColumn('workOrder')" class="text-dark font-medium fs-4">Work Order &nbsp; <i
+                        <th (click)="sortColumn('workOrder')" class="text-dark font-medium fs-4">Order ID &nbsp; <i
                                 class="bi bi-arrow-down-up"></i></th>
                         <th (click)="sortColumn('woStatus')" class="text-dark font-medium fs-4">Status &nbsp; <i
                                 class="bi bi-arrow-down-up"></i></th>
-                        <th (click)="sortColumn('doctor')" class="text-dark font-medium fs-4">Patient &nbsp; <i
+                        <th (click)="sortColumn('doctor')" class="text-dark font-medium fs-4">Doctor &nbsp; <i
                                 class="bi bi-arrow-down-up"></i></th>
-                        <th (click)="sortColumn('date')" class="text-dark font-medium fs-4">Required &nbsp; <i
+                        <th (click)="sortColumn('date')" class="text-dark font-medium fs-4">Order date &nbsp; <i
                                 class="bi bi-arrow-down-up"></i></th>
-                        <th (click)="sortColumn('product')" class="text-dark font-medium fs-4">Product &nbsp; <i
+                        <th (click)="sortColumn('product')" class="text-dark font-medium fs-4">Service &nbsp; <i
                                 class="bi bi-arrow-down-up"></i></th>
                         <th class="text-dark font-medium fs-4">Files</th>
                         <th class="text-dark font-medium fs-4">Actions</th>
@@ -43,30 +43,30 @@
                 <tbody>
                     <tr *ngFor='let ts of filteredData'>
                         <td class="fs-4">
-                            {{ts.workOrder}}
-
+                            <!-- {{ts.orderid}} -->
+                            ...{{ ts.orderid.slice(-3) }}
                         </td>
                         <td>
                             <!-- <span class="p-2 bg-{{ts.status}} rounded-circle d-inline-block ms-3"></span> -->
-                            <span>{{ts.woStatus}}</span>
+                            <span>In Production</span>
                         </td>
                         <td>
                             <div class="d-flex align-items-center">
-                                <img [src]=ts.image alt="user" width="45" class="rounded-circle">
+                                <img src='assets/images/users/user.svg' alt="user" width="30" class="rounded-circle">
                                 <div class="ms-3">
-                                    <h5 class="mb-0 font-medium">{{ts.doctor}}</h5>
-                                    <span class="text-muted">{{ts.doctorId}}</span>
+                                    <h5 class="mb-0 font-medium">{{ts.doctorname}}</h5>
+                                    <span class="text-muted">{{ts.doctorid}}</span>
                                 </div>
                             </div>
                         </td>
                         <td>
-                            <h5 class="mb-0 fw-normal">{{ts.date}}</h5>
+                            <h5 class="mb-0 fw-normal">{{ts.createdAt | date:'yyyy-MM-dd'}}</h5>
                         </td>
                         <td class="fs-4">
-                            {{ts.product}}
+                            {{ts.service}}
                         </td>
                         <td class="fs-4">
-                            <img [src]="ts.files" alt="user" width="50">
+                            <img src="assets/images/files/1.jpg" alt="user" width="50">
                         </td>
                         <td>
                             <button class="btn btn-light-primary btn-sm"
@@ -78,12 +78,10 @@
                             <button *ngIf="ts.woStatus === 'In Production'" class="btn btn-warning disabled btn-sm"><i
                                     class="bi bi-person-plus"></i></button>
                             &nbsp;
-                            <button *ngIf="ts.woStatus === 'Yet to start'" class="btn btn-success btn-sm"
-                                value="{{ts.workOrder}}" name="workOrder" (click)="start($event)"><i
-                                    class="bi bi-play"></i></button>
+                            <!-- <button class="btn btn-success btn-sm" value="{{ts.workOrder}}" name="workOrder"
+                                (click)="start($event)"><i class="bi bi-play"></i></button> -->
 
-                            <button *ngIf="ts.woStatus === 'In Production'" class="btn btn-secondary disabled btn-sm"><i
-                                    class="bi bi-pause"></i></button>
+                            <button class="btn btn-secondary disabled btn-sm"><i class="bi bi-pause"></i></button>
 
                         </td>
 
@@ -96,6 +94,12 @@
 
 
                     </tr>
+                    <tr *ngIf='!orders_length'>
+                        <td colspan="7" class="text-center">
+                            No orders!!
+                        </td>
+                    </tr>
+
 
                 </tbody>
             </table>
