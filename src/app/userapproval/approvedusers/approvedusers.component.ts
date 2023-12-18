@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { userapprovaldata, approvallist } from '../userapproval-data';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
+import { AdminService } from 'src/app/services/admin.service';
 
 function joinDictionaries(clinics, statuses) {
   // Create a map to store clinics based on clinic ID
@@ -39,7 +40,8 @@ export class ApprovedusersComponent {
     public router: Router,
     private activatedRoute: ActivatedRoute,
     private route: ActivatedRoute,
-    private authservice: AuthService
+    private authservice: AuthService,
+    private adminservice: AdminService
   ) {}
 
   //sortcolumn
@@ -101,7 +103,7 @@ export class ApprovedusersComponent {
   ngOnInit(): void {
     const { adminToken } = JSON.parse(localStorage.getItem('user') ?? '{}');
     // console.log(adminToken)
-    this.userdatasubscribtion = this.authservice
+    this.userdatasubscribtion = this.adminservice
       .getallusers(adminToken)
       .subscribe(
         (res: any) => {
