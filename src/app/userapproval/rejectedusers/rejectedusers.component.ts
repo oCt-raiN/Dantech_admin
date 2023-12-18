@@ -18,6 +18,18 @@ function joinDictionaries(clinics, statuses) {
   return joinedData;
 }
 
+function check_table_status(object: any){
+  for (let obj in object){
+    // console.log("object",object[0]["statuscode"])
+    if(object[obj]) {
+      if (object[obj]["statuscode"] === "RJ5000"){
+      return true;
+    }
+  }
+}
+return false;
+}
+
 @Component({
   selector: 'app-rejectedusers',
   templateUrl: './rejectedusers.component.html',
@@ -35,6 +47,7 @@ export class RejectedusersComponent {
   user_details: any;
   user_status: any;
   userdatasubscribtion: Subscription;
+  table_state = false;
 
   constructor(
     public router: Router,
@@ -114,6 +127,7 @@ export class RejectedusersComponent {
           this.user_status = this.user_details['state'];
           this.user_data = joinDictionaries(this.user_datas, this.user_status);
           this.filteredData = this.user_data;
+          this.table_state = check_table_status(this.user_data)
           // console.log(this.user_datas, this.user_status);
           console.log(this.user_data);
           // console.log(this.filteredData)
