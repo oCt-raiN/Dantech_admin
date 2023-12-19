@@ -97,6 +97,7 @@ export class OrdersComponent {
           }
           this.order_data = this.order_details.order;
           this.filteredData = this.order_data;
+          console.log(this.order_data);
         },
         (error: any) => {
           console.log(error);
